@@ -1,50 +1,28 @@
 import 'package:flutter/material.dart';
+import 'screens/search_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MainApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  int _counter = 0;
-
-  void _incrementCounter(){
-    setState(() {
-      _counter++;
-    });
-  }
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('First Widget App'),
+      title: 'Qiita Search',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        fontFamily: 'Hiragino Sans',
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF55C500),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children:<Widget>[
-              const Text(
-                'Welcome to Flutter!',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
+        textTheme: const TextTheme(  // ← constで直接指定する方法に変更
+          bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
+      home: const SearchScreen(),  // ← こっちを使う前提で修正
     );
   }
-}
+}}
