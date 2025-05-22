@@ -4,19 +4,45 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _counter = 0;
+
+  void _incrementCounter(){
+    setState(() {
+      _counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      home:Scaffold(
+      home: Scaffold(
         appBar: AppBar(
           title: Text('First Widget App'),
         ),
         body: Center(
-          child: Text(
-            'Welcome to Flutter!',
-            style: TextStyle(fontSize:24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:<Widget>[
+              const Text(
+                'Welcome to Flutter!',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
         ),
       ),
     );
