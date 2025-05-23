@@ -23,6 +23,37 @@ class ArticleContainer extends StatelessWidget{
             Radius.circular(32),
           ),
         ),
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              DateFormat('yyyy/MM/dd').format(article.createdAt),
+              style: const TextStyle(
+                color:Colors.white,
+                fontSize:12,
+              ),
+            ),
+            Text(
+              article.title,
+              maxLines:2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize:16,
+                fontWeight: FontWeight.bold,
+                color:Colors.white,
+              ),
+            ),
+            Text(
+              '#${article.tags.join('#')}',
+              style: const TextStyle(
+                fontSize:12,
+                color:Colors.white,
+                fontSize
+              )
+
+            ),
+          ],
+        ),
       ),
     );
   }
