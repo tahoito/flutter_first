@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_first/models/article.dart';
+import 'package:flutter_first/models/user.dart';
+import 'package:flutter_first/widgets/article_container.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Article> articles = [];
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,37 +34,46 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               decoration: const InputDecoration(
                 hintText: '検索ワードを入力してください',
-                border: OutlineInputBorder(), // ← 見た目の枠を追加
+                border: OutlineInputBorder(),
               ),
               onSubmitted: (String value) async {
+                setState(() {
+                  isLoading = true;
+                });
                 final results = await searchQiita(value);
-                setState(() => articles = results);
+                setState(() {
+                  articles = results;
+                  isLoading = false;
+                });
               },
             ),
           ),
 
-          // 検索結果一覧
-          Expanded(
-            child: ListView.builder(
-              itemCount: articles.length,
-              itemBuilder: (context, index) {
-                final article = articles[index];
-                return ListTile(
-                  title: Text(article.title),
-                  subtitle: Text(article.user.id),
-                  onTap: () {
-                    // 後でURL遷移も追加できる！
-                  },
-                );
-              },
+          // ローディング表示
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
             ),
-          ),
+
+          // 検索結果一覧
+          if (!isLoading)
+            Expanded(
+              child: ListView.builder(
+                itemCount: articles.length,
+                itemBuilder: (context, index) {
+                  final article = articles[index];
+                  return ArticleContainer(article: article);
+                },
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
+// API通信部分
 Future<List<Article>> searchQiita(String keyword) async {
   final uri = Uri.https('qiita.com', '/api/v2/items', {
     'query': 'title:$keyword',
