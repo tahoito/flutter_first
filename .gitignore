@@ -1,4 +1,5 @@
-# Miscellaneous
+# .env ファイルを追加
+.env# Miscellaneous
 *.class
 *.log
 *.pyc

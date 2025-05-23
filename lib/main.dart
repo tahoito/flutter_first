@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'screens/search_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
-void main() {
+Future<void> main() async{
+  await dotenv.load(fileName: '.env');
   runApp(const MainApp());
 }
 
@@ -26,4 +27,8 @@ class MainApp extends StatelessWidget {
       home: const SearchScreen(),  // ← こっちを使う前提で修正
     );
   }
-}}
+}
+
+
+
+final String? token = dotenv.env['QIITA_ACCESS_TOKEN']; // .env に記述したアクセストークンを取得
