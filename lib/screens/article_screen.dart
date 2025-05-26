@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // ← これが必要
 import 'package:flutter_first/models/article.dart';
-import '../screens/article_screen.dart';
+import 'package:intl/intl.dart';
 
-
-
-
-class ArticleContainer extends StatelessWidget {
-  const ArticleContainer({
-    super.key,
-    required this.article,
-  });
+class ArticleScreen extends StatelessWidget {
+  const ArticleScreen({super.key, required this.article});
 
   final Article article;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 12,
-        horizontal: 16,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -30,30 +20,19 @@ class ArticleContainer extends StatelessWidget {
           );
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: const BoxDecoration(
             color: Color(0xFF55C500),
-            borderRadius: BorderRadius.all(
-              Radius.circular(32),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(32)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 投稿日
               Text(
                 DateFormat('yyyy/MM/dd').format(article.createdAt),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
               const SizedBox(height: 8),
-
-              // タイトル
               Text(
                 article.title,
                 maxLines: 2,
@@ -65,8 +44,6 @@ class ArticleContainer extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-
-              // タグ
               Text(
                 '#${article.tags.join(' #')}',
                 style: const TextStyle(
@@ -76,13 +53,10 @@ class ArticleContainer extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // ハート＋投稿者情報
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // ハートといいね数
                   Column(
                     children: [
                       const Icon(Icons.favorite, color: Colors.white),
@@ -95,7 +69,6 @@ class ArticleContainer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // 投稿者アイコン＋ID
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
