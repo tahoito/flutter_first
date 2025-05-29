@@ -10,13 +10,46 @@ class ArticleScreen extends StatefulWidget {
   State<ArticleScreen> createState() => _ArticleScreenState();
 }
 
-class _ArticleScreenState extends State<ArticleScreen> {
+class _ArticleScreenState extends State<ArticleScreen> with SingleTickerProviderStateMixin {
   late int likes;
+  bool isLiked = false;
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
     likes = widget.article.likesCount;
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    final curved = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(curved);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void toggleLike() {
+    setState(() {
+      if (!isLiked) {
+        likes++;
+      } else {
+        likes--;
+      }
+      isLiked = !isLiked;
+    });
+    _controller.forward().then((_) => _controller.reverse());
   }
 
   @override
@@ -36,7 +69,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 decoration: const BoxDecoration(
-                  color: Color(0xFF55C500),
+                  color: Color(0xFF70D9DC),
                   borderRadius: BorderRadius.all(Radius.circular(32)),
                 ),
                 child: Column(
@@ -73,20 +106,22 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     children: [
                       Column(
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.favorite_border),
-                            color: Colors.white,
-                            onPressed: () {
-                              setState(() {
-                              likes++;
-                              });
-                            },
+                          GestureDetector(
+                            onTap: toggleLike,
+                            child: ScaleTransition(
+                              scale: _scaleAnimation,
+                              child: Icon(
+                                isLiked ? Icons.favorite : Icons.favorite_border,
+                                color: isLiked ? Colors.red : Colors.white,
+                                size: 30,
+                              ),
+                            ),
                           ),
                           Text(
                             likes.toString(),
                             style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                              fontSize: 12,
+                              color: Colors.white,
                             ),
                           ),
                         ],
