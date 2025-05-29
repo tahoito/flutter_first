@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // ← これが必要
+import 'package:intl/intl.dart';
 import 'package:flutter_first/models/article.dart';
 import '../screens/article_screen.dart';
 
-
-
-
-class ArticleContainer extends StatelessWidget {
+class ArticleContainer extends StatefulWidget {
   const ArticleContainer({
     super.key,
     required this.article,
   });
 
   final Article article;
+
+  @override
+  State<ArticleContainer> createState() => _ArticleContainerState();
+}
+
+class _ArticleContainerState extends State<ArticleContainer> {
+  late int likes;
+
+  @override
+  void initState() {
+    super.initState();
+    likes = widget.article.likesCount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,37 +35,29 @@ class ArticleContainer extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ArticleScreen(article: article),
+              builder: (context) => ArticleScreen(article: widget.article),
             ),
           );
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: const BoxDecoration(
-            color: Color(0xFF55C500),
-            borderRadius: BorderRadius.all(
-              Radius.circular(32),
-            ),
+            color: Color(0xFF70D9DC),
+            borderRadius: BorderRadius.all(Radius.circular(32)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 投稿日
               Text(
-                DateFormat('yyyy/MM/dd').format(article.createdAt),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
+                DateFormat('yyyy/MM/dd').format(widget.article.createdAt),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
               const SizedBox(height: 8),
 
               // タイトル
               Text(
-                article.title,
+                widget.article.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -68,7 +70,7 @@ class ArticleContainer extends StatelessWidget {
 
               // タグ
               Text(
-                '#${article.tags.join(' #')}',
+                '#${widget.article.tags.join(' #')}',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.white,
@@ -85,9 +87,17 @@ class ArticleContainer extends StatelessWidget {
                   // ハートといいね数
                   Column(
                     children: [
-                      const Icon(Icons.favorite, color: Colors.white),
+                      IconButton(
+                        icon: const Icon(Icons.favorite_border),
+                        color: Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            likes++;
+                          });
+                        },
+                      ),
                       Text(
-                        article.likesCount.toString(),
+                        likes.toString(),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,
@@ -95,18 +105,19 @@ class ArticleContainer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // 投稿者アイコン＋ID
+
+                  // 投稿者
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       CircleAvatar(
                         radius: 26,
                         backgroundImage:
-                        NetworkImage(article.user.profileImageUrl),
+                        NetworkImage(widget.article.user.profileImageUrl),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        article.user.id,
+                        widget.article.user.id,
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,

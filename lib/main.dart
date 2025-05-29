@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.green,
         fontFamily: 'Hiragino Sans',
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF55C500),
+          backgroundColor: Color(0xFF70D9DC),
         ),
         textTheme: const TextTheme(  // ← constで直接指定する方法に変更
           bodyMedium: TextStyle(color: Colors.white),
